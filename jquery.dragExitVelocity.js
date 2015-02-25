@@ -4,11 +4,11 @@
  *
  *     // Chain version (normal jQuery semantics)
  *     $(document)
- * 			.dragExitVelocity(100, function (velocity) { ... })
+ * 			.dragExitVelocity(300, function (velocity) { ... })
  *			.click(...)
  *
  *    // Promise version (distinguished by lack of callback)
- *     $(document).dragExitVelocity(100) // 100 msec averating window
+ *     $(document).dragExitVelocity(300) // 300 msec averating window
  *			.done(function (velocity) { ... });
  *
  *
@@ -60,6 +60,20 @@
 ;(function ($, undefined) {
 	"use strict";
 
+	/* dragExitVelocity
+	 *
+	 * Provides the average exit velocity
+	 * sampled during the provided time window
+	 * on exit.
+	 *
+	 * Required:
+	 *   [0] msec: The length of the averaging window
+	 *
+	 * Optional:
+	 *   [1] fn: callback
+	 *
+	 * Return: promise or this depending on if callback is provided
+	 */
 	$.fn.dragExitVelocity = function (msec, fn) {
 		var target = $(this);
 
@@ -179,8 +193,8 @@
 		};
 	}
 
-	// Since we're not likely to land exactly on 
-	// msec, if the previous datapoint was within a reasonable distance
+	// Since we're not likely to land exactly on the
+	// msec boundary, if the previous datapoint was within a reasonable distance
 	// of the border (let's say 50 msec), do a linear interpolation
 	function interpolateTrailingEdge (buffer, j, msec, interpolation_threshold) {
 		var mostrecent = buffer[0];
